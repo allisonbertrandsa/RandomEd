@@ -16,14 +16,15 @@ Architecture:
 """
 from numpy.random import choice
 
+
 class RandomEd(object):
     """This class generates random education assignments"""
     def __init__(self, **args):
         """Initialize with a tuple of dictionary key=assignment, value=weights"""
-        print("Init: ",self.__class__.__name__)
+        print("Init: ", self.__class__.__name__)
         self.assignments = args
 
-        #Which assignments have been completed
+        # Which assignments have been completed
         self.history = {}
 
     def normalize_weights(self):
@@ -32,7 +33,7 @@ class RandomEd(object):
         sumweights = sum(self.assignments.values())
         keys = list(self.assignments)
         normweights = [(i/float(sumweights)) for i in self.assignments.values()]
-        self.assignments = dict(zip(keys,normweights))
+        self.assignments = dict(zip(keys, normweights))
         print("After weight: " + repr(self.assignments))
 
     def print_list(self):
@@ -44,10 +45,10 @@ class RandomEd(object):
         print(self.assignments.values())                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
         self.normalize_weights()
 
-        next_ed = choice(list(self.assignments),p=list(self.assignments.values()))
+        next_ed = choice(list(self.assignments), p=list(self.assignments.values()))
         choicestring = "Next assignment is " + next_ed + ". Accept(Y/N):"
         reply = input(choicestring)
-        if reply=='Y':
+        if reply == 'Y':
             ni = self.assignments.pop(next_ed)
             self.history[next_ed] = ni
 
@@ -55,11 +56,11 @@ class RandomEd(object):
         """Print the history of assignments selected"""
         print(self.history)
 
-    def add_ed(self,**args):
+    def add_ed(self, **args):
         """Add new assignments"""
         self.assignments.update(args)
 
-    def remove_ed(self,*args):
+    def remove_ed(self, *args):
         """Remove assignments from the list"""
         for item in args:
             del self.assignments[item]
@@ -71,7 +72,7 @@ class RandomEd(object):
 
 if __name__ == "__main__":
     print("This is main")
-    r = RandomEd(a=0.2,b=0.3,c=0.4)
+    r = RandomEd(a=0.2, b=0.3, c=0.4)
     r.print_list()
     r.pick_ed()
     print("Assignments completed:")
@@ -80,7 +81,7 @@ if __name__ == "__main__":
     r.reset_list()
     r.print_list()
     r.print_history()
-    r.add_ed(d=1,e=2,f=3)
+    r.add_ed(d=1, e=2, f=3)
     r.print_list()
-    r.remove_ed('e','c')
+    r.remove_ed('e', 'c')
     r.print_list()
