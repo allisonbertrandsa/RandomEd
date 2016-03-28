@@ -10,7 +10,6 @@ Architecture:
     - Functions to store and print assignment history
     - Random assignment picker that uses weights
     - Completed assingments are removed from the random pool unless reset
-    - Weight of zero can also be used to temporarily remove assignment from rotation
     - Program can be pickled for storage of current state
 
 """
@@ -28,13 +27,13 @@ class RandomEd(object):
         self.history = {}
 
     def normalize_weights(self):
-        """Normalize weights to sum to 1 for numpy choice selection"""
-        print("Before weight: " + repr(self.assignments))
+        """Normalize weights to sum to 1 for numpy choice selection
+           Return the assignment values with normalized weights
+        """
         sumweights = sum(self.assignments.values())
         keys = list(self.assignments)
         normweights = [(i/float(sumweights)) for i in self.assignments.values()]
-        self.assignments = dict(zip(keys, normweights))
-        print("After weight: " + repr(self.assignments))
+        return dict(zip(keys, normweights))
 
     def print_list(self):
         """Print a list of all possible assignments"""
@@ -42,10 +41,9 @@ class RandomEd(object):
 
     def pick_ed(self):
         """Pick the next educational assignment"""
-        print(self.assignments.values())                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-        self.normalize_weights()
+        weightedvals = self.normalize_weights()
 
-        next_ed = choice(list(self.assignments), p=list(self.assignments.values()))
+        next_ed = choice(list(weightedvals), p=list(weightedvals.values()))
         choicestring = "Next assignment is " + next_ed + ". Accept(Y/N):"
         reply = input(choicestring)
         if reply == 'Y':
@@ -81,7 +79,9 @@ if __name__ == "__main__":
     r.reset_list()
     r.print_list()
     r.print_history()
+    print("Adding new assignments, d, e, f")
     r.add_ed(d=1, e=2, f=3)
     r.print_list()
+    print("Deleting assignments, e, c")
     r.remove_ed('e', 'c')
     r.print_list()
